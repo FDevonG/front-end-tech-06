@@ -37,10 +37,9 @@ keyboard.addEventListener('click', (event) => {
  */
 function setGameUp(){
     removeClass('chosen');
+    resetPhrase();
     addPhraseToDisplay(getRandomPhraseAsArray(phrases));
-    for (let i = 0; i < tries.length; i++){
-        tries[i].src = 'images/liveheart.png';
-    }
+    resetHearts();
     missed = 0;
     overlay.style.display = 'none';
 }
@@ -53,6 +52,27 @@ function removeClass(className){
     const chosenKeys = document.querySelectorAll(`.${className}`);
     for (let i = 0; i < chosenKeys.length; i++) {
         chosenKeys[i].classList.remove(`${className}`);
+    }
+}
+
+/**
+ * This removes the phrase items from the ul element so we can spawn a fresh one
+ *
+ */
+function resetPhrase(){
+    const letters = document.querySelectorAll('#phrase ul li');
+    for (let i = 0; i < letters.length; i++) {
+        letters[i].remove();
+    }
+}
+
+/**
+ * This makes all the heart images live again
+ *
+ */
+function resetHearts(){
+    for (let i = 0; i < tries.length; i++){
+        tries[i].src = 'images/liveheart.png';
     }
 }
 
@@ -73,16 +93,17 @@ function getRandomPhraseAsArray(arr) {
  * @param {array} arr - the array of characters to display
  */
 function addPhraseToDisplay(arr){
-    let html = `<ul>`
+    let html;
     for (let i = 0;i < arr.length; i++) {
+        html = document.createElement('li');
+        html.textContent = arr[i];
         if (arr[i] !== " "){
-            html += `<li class="letter">${arr[i]}</li>`;
+            html.className = 'letter';
         } else {
-            html += `<li class="space">${arr[i]}</li>`;
+            html.className = 'space';
         }
+        phrase.children[0].append(html);
     }
-    html += `</ul>`;
-    phrase.innerHTML = html;
 }
 
 /**
@@ -115,13 +136,11 @@ function checkWin(){
     const shown = document.querySelectorAll('.show');
 
     if(letters.length === shown.length) {
-        overlay.classList.add('win');
-        overlay.classList.remove('lose');
+        overlay.className = 'win';
         turnOnOverlay(`<p class="message">Congratulations, you have won!</p>`);
     }
     else if (missed >= 5) {
-        overlay.classList.add('lose');
-        overlay.classList.remove('win');
+        overlay.className = 'lose';
         turnOnOverlay(`<p class="message">you are out of tries!</p>`);
         
     }
@@ -137,5 +156,5 @@ function turnOnOverlay(htmlString){
         overlay.removeChild(document.querySelector('.message'));
     }
     document.querySelector('.title').insertAdjacentHTML('afterend', htmlString);
-    overlay.style.display = 'flex';
+    overlay.removeAttribute('style');
 }
