@@ -102,7 +102,7 @@ function addPhraseToDisplay(arr){
         } else {
             html.className = 'space';
         }
-        phrase.children[0].append(html);
+        phrase.firstElementChild.append(html);
     }
 }
 
