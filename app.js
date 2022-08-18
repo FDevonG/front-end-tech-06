@@ -22,14 +22,39 @@ document.querySelector('.btn__reset').addEventListener('click', () => {
 keyboard.addEventListener('click', (event) => {
     if(event.target.tagName === 'BUTTON'){
         event.target.classList.add('chosen');
-        const letterFound = checkLetter(event);
-        if(letterFound === null){
-            tries[missed].src = 'images/lostHeart.png';
-            missed++;
-        }
-        checkWin();
+        handleInteraction(event.key.toUpperCase());
     }
 });
+
+window.addEventListener('keyup', e => {
+	if(overlay.style.display !== 'none'){
+		return;
+	}
+	const regex = /[a-z]/i;
+	if(regex.test(e.key)){
+		document.querySelectorAll('#qwerty button').forEach(button => {
+			if(button.textContent.toUpperCase() === e.key.toUpperCase()){
+				button.classList.add('chosen');
+			}
+		});
+		
+		handleInteraction(e.key.toUpperCase());
+	}
+});
+
+/**
+ * Retrieves a user by email.
+ * @function
+ * @param {String} letter- the letter to check the phrase for
+ */
+function handleInteraction(letter){
+	const letterFound = checkLetter(letter);
+	if(letterFound === null){
+		tries[missed].src = 'images/lostHeart.png';
+		missed++;
+	}
+	checkWin();
+}
 
 /**
  * Sets the game up for play by hiding the overlay, and setting the phrase up
@@ -109,13 +134,13 @@ function addPhraseToDisplay(arr){
 /**
  * When the keyboard buttons are clicked this checks the corresponding letter to see if that letter is in the phrase. if it is they all get revealed, if not, the player loses a heart
  *
- * @param {event} - the keyboard button event
+ * @param {String} - the letter to check for
  */
-function checkLetter(event){
+function checkLetter(letter){
     const letters = document.querySelectorAll('.letter');
     let letterFound;
     for (let i = 0; i < letters.length; i++){
-        if(letters[i].textContent.toUpperCase() === event.target.textContent.toUpperCase()){
+        if(letters[i].textContent.toUpperCase() === letter){
             letterFound = letters[i].textContent;
             letters[i].classList.add('show');
         } 
