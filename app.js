@@ -43,7 +43,7 @@ window.addEventListener('keyup', e => {
 });
 
 /**
- * Retrieves a user by email.
+ * handles interactions
  * @function
  * @param {String} letter- the letter to check the phrase for
  */
