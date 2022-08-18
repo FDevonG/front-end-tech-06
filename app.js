@@ -20,9 +20,9 @@ document.querySelector('.btn__reset').addEventListener('click', () => {
 });
 
 keyboard.addEventListener('click', (event) => {
-    if(event.target.tagName === 'BUTTON'){
+    if(event.target.tagName === 'BUTTON' && !event.target.classList.contains('chosen')){
         event.target.classList.add('chosen');
-        handleInteraction(event.key.toUpperCase());
+        handleInteraction(event.target.textContent.toUpperCase());
     }
 });
 
@@ -32,13 +32,15 @@ window.addEventListener('keyup', e => {
 	}
 	const regex = /[a-z]/i;
 	if(regex.test(e.key)){
+		
 		document.querySelectorAll('#qwerty button').forEach(button => {
-			if(button.textContent.toUpperCase() === e.key.toUpperCase()){
+			if(button.textContent.toUpperCase() === e.key.toUpperCase() && !button.classList.contains('chosen')){
 				button.classList.add('chosen');
+				handleInteraction(e.key.toUpperCase());
 			}
 		});
 		
-		handleInteraction(e.key.toUpperCase());
+		
 	}
 });
 
